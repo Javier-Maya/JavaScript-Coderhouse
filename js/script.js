@@ -1,129 +1,85 @@
-//Simular el ingreso o retiro de dinero de un banco
+// Simulación sobre depositar o retirar dólares de un banco
 
-let ingreso = false
+// Se declaran las variables
+let saldo = 1000; // Saldo inicial
+let usuarioAutenticado = false; // Estado de autenticación del usuario
 
-function login( intentos, maximaCantidadIntentos){
-    // nuestro log in
-    const contrasenia = "123"
-    const profesor = "andres"
-    alert(`Tiene ${maximaCantidadIntentos} intentos posibles de ingresar, este es su intento ${intentos+1}`)
-    let profesorIngresado = prompt("Ingrese su nombre")
-    let profesorLower = profesorIngresado.toLocaleLowerCase()
-    let constraseniaIngresada = prompt("ingrese la contrasenia")
-    if((profesor === profesorLower)&&(contrasenia===constraseniaIngresada)){
-        alert("Bienvenido")
-        ingreso=true
-        return true
+// Función para iniciar sesión
+function iniciarSesion() {
+  const usuario = prompt("Ingrese su nombre de usuario");
+  const contraseña = prompt("Ingrese su contraseña");
+
+  // Verificar las credenciales del usuario (puedes modificar esta lógica según tus necesidades)
+  if (usuario === "usuario" && contraseña === "123") {
+    usuarioAutenticado = true;
+    alert("Inicio de sesión exitoso. ¡Bienvenido!");
+  } else {
+    alert("Credenciales inválidas. Inténtelo de nuevo.");
+  }
+}
+
+// Función para retirar dinero
+function retirarDinero() {
+  if (usuarioAutenticado) {
+    const cantidad = Number(prompt(`Su saldo actual es de ${saldo} dólares. Ingrese la cantidad a retirar`));
+
+    // Verificar si hay suficiente saldo para realizar el retiro
+    if (cantidad <= saldo) {
+      saldo -= cantidad;
+      alert(`Retiro exitoso. Su nuevo saldo es de ${saldo} dólares.`);
     } else {
-        alert(`Le quedan ${maximaCantidadIntentos-(intentos+1)} intentos`)
+      alert("Saldo insuficiente para realizar el retiro.");
     }
+  } else {
+    alert("Debe iniciar sesión primero.");
+  }
 }
 
-function loginLoop(intentos, maximaCantidadIntentos){
-    do{
-    if(login(intentos, maximaCantidadIntentos)){
-        break //frena el loop si ingresa
-    } 
-    intentos++
-} while(intentos<maximaCantidadIntentos)
-}
-function calcularPromedio (){
-    // calcula el promedio de todos los alumnos
-    let agregarAlumno = true
-    let alumnos = 0
-    let sumaTotal = 0
-    while(agregarAlumno){
-        //  alumnos = alumnos+1
-        let nota = prompt(`Ingrese la nota del alumno ${alumnos+1}`)
-        let notaProcesada = Number(nota)
-        if(isNaN(notaProcesada) || nota === null){
-            alert("Por favor ingrese un número")
-            continue
-        }
-        alumnos++
-        sumaTotal += notaProcesada
-        agregarAlumno = confirm("Hay más alumnos?")
-        // sumaTaotal = sumaTotal + nota
+// Función para depositar dinero
+function depositarDinero() {
+  if (usuarioAutenticado) {
+    const cantidad = Number(prompt(`Su saldo actual es de ${saldo} dólares. Ingrese la cantidad a depositar`));
+
+    // Verificar que la cantidad sea válida
+    if (isNaN(cantidad) || cantidad <= 0) {
+      alert("Ingrese una cantidad válida.");
+    } else {
+      saldo += cantidad;
+      alert(`Cantidad agregada exitosamente. Su nuevo saldo es de ${saldo} dólares.`);
     }
-    alert(`El promedio total de los ${alumnos} alumnos es: ${(sumaTotal/alumnos)}`)
-    return sumaTotal/alumnos
+  } else {
+    alert("Debe iniciar sesión primero.");
+  }
 }
 
-const examen = ()=>{
-    alert("Bienvenido al exámen de matemáticas")
-    let nota = 0
-    const corrector= (num1, num2,operacion, rtaAlumno)=>{
-        switch(operacion){
-            case "+":
-                if(num1+num2===rtaAlumno) {
-                    nota += 2
-                }
-                break
-            case "-":
-                if(num1-num2===rtaAlumno) {
-                    nota += 2
-                }
-                break
-            case "*":
-                if(num1*num2===rtaAlumno) {
-                    nota += 2
-                }
-                break
-            case "/":
-                if(num1/num2===rtaAlumno) {
-                    nota += 2
-                }
-            default: console.log("ERROR")
-        }
-        
-    }
-    // esto puede ser su propia funcion que llamo 5 veces
-    let preg1 = Number(prompt("Cuánto es 5*8"))
-    corrector(5,8, "*", preg1)
-    let preg2 = Number(prompt("Cuánto es 3+4"))
-    corrector(3,4, "+", preg2)
-    let preg3 = Number(prompt("Cuánto es 13*2"))
-    corrector(13,2, "*", preg3)
-    let preg4 = Number(prompt("Cuánto es 100/4"))
-    corrector(100,4, "/", preg4)
-    let preg5 = Number(prompt("Cuánto es 10-3"))
-    corrector(10,3, "-", preg5)
-
-    alert(`Su nota es: ${nota}/10`)
-    return nota
-}
-
-
-
+// Función para preguntar al usuario qué operación desea realizar
 const preguntaSeleccion=()=>{
-    let eleccion = prompt("Que desea hacer: \n 1 - Calcular promedio \n 2 - Tomar un examen")
+    let eleccion = prompt("Que desea hacer: \n 1 - Retirar dinero \n 2 - Depositar dinero")
     return Number(eleccion)
 }
 const selector=(eleccion)=>{
+    // Realizar la operación correspondiente en función de la opción elegida
     switch(eleccion){
         case 1:
-            // calcular promedio
-            calcularPromedio()
+            // Retirar el dinero
+            retirarDinero()
             break
         case 2:
-            // tomar un examen
-            examen()
+            // Depositar el dinero
+            depositarDinero()
             break
         default:
-            alert("ingreso un valor inválido")
+            alert("Opción inválida. Inténtelo de nuevo.")
     }
 }
 
 const inicializar = ()=>{
-    let intentos = 0
-    const maximaCantidadDeIntentos = 3
     do{
-        login(intentos, maximaCantidadDeIntentos)
-        if(ingreso){break}
-        intentos++
-    } while(intentos<3)
+        iniciarSesion()
+        if(usuarioAutenticado){break}
+    } while(usuarioAutenticado)
 
-    if(ingreso){
+    if(usuarioAutenticado){
         let loop = true
         do{
             selector(preguntaSeleccion())
@@ -132,4 +88,5 @@ const inicializar = ()=>{
     }
 }
 
-inicializar()
+// Se llama la función para que ejecute todo el código
+inicializar();
