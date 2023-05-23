@@ -1,21 +1,36 @@
-// Simulación sobre depositar o retirar dólares de un banco
+// Simulación para depositar o retirar dólares de un banco
 
 // Se declaran las variables
 let saldo = 1000; // Saldo inicial
 let usuarioAutenticado = false; // Estado de autenticación del usuario
 
 // Función para iniciar sesión
-function iniciarSesion() {
-  const usuario = prompt("Ingrese su nombre de usuario");
-  const contraseña = prompt("Ingrese su contraseña");
+function iniciarSesion(intentos, intentosMaximo) {
+  const usuario = "usuario"
+  const contrasena = "123456"
 
-  // Verificar las credenciales del usuario (puedes modificar esta lógica según tus necesidades)
-  if (usuario === "usuario" && contraseña === "123") {
+  alert(`Tiene ${intentosMaximo} intentos posibles de ingresar, este es su intento ${intentos+1}`)
+
+  const usuarioIngresado = prompt("Ingrese su nombre de usuario");
+  const usuarioLower = usuarioIngresado.toLocaleLowerCase()
+  const contrasenaIngresada = prompt("Ingrese su contraseña");
+
+  // Verificar las credenciales del usuario
+  if (usuario === usuarioLower && contrasena === contrasenaIngresada) {
     usuarioAutenticado = true;
     alert("Inicio de sesión exitoso. ¡Bienvenido!");
   } else {
-    alert("Credenciales inválidas. Inténtelo de nuevo.");
+    alert(`Credenciales inválidas. Le quedan ${intentosMaximo-(intentos+1)} intentos.`);
   }
+}
+
+function loginLoop(intentos, intentosMaximo){
+  do{
+  if(login(intentos, intentosMaximo)){
+      break; //Frena el loop si ingresa
+  } 
+  intentos++
+} while(intentos<intentosMaximo)
 }
 
 // Función para retirar dinero
@@ -63,21 +78,24 @@ const selector=(eleccion)=>{
         case 1:
             // Retirar el dinero
             retirarDinero()
-            break
+            break;
         case 2:
             // Depositar el dinero
             depositarDinero()
-            break
+            break;
         default:
             alert("Opción inválida. Inténtelo de nuevo.")
     }
 }
 
 const inicializar = ()=>{
-    do{
-        iniciarSesion()
-        if(usuarioAutenticado){break}
-    } while(usuarioAutenticado)
+  let intentos = 0
+  const intentosMaximo = 3
+  do{
+    iniciarSesion(intentos, intentosMaximo)
+    if(usuarioAutenticado){break}
+    intentos++
+    } while(intentos<intentosMaximo)
 
     if(usuarioAutenticado){
         let loop = true
